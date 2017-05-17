@@ -11,10 +11,10 @@
 #define SONAR_PRECIPITATOR_H
 
 #include "sonar_pointcloud.h"
+#include "sonar_pointcloud/Sonar.h"
 
 #include <boost/thread.hpp>
 
-#include <sensor_msgs/Range.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl_ros/point_cloud.h>
 #include <tf2_ros/transform_listener.h>
@@ -39,6 +39,8 @@ private:
     std::string pointcloudFrame;
     tf2_ros::Buffer tfBuffer;
     tf2_ros::TransformListener tfListener;
+
+    std::vector<sonar_pointcloud::Sonar> sonars;
 
 };
 

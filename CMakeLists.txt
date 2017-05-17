@@ -126,6 +126,7 @@ include_directories(
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
   src/${PROJECT_NAME}/SonarPrecipitator.cpp
+  src/${PROJECT_NAME}/Sonar.cpp
 )
 
 ## Add cmake target dependencies of the library

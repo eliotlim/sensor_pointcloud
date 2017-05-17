@@ -39,7 +39,7 @@ SonarPrecipitator::SonarPrecipitator(const std::string& pointcloudTopic, const s
 */
 
 void SonarPrecipitator::addSonar(const std::string& sonarTopic, const std::string& sonarFrame) {
-
+    sonars.push_back(Sonar(sonarTopic, sonarFrame));
 }
 
 /**
