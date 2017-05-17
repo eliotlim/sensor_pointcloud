@@ -7,6 +7,8 @@
     @version 1.0 (16/5/17)
 */
 
+#include <sonar_pointcloud/SonarPrecipitator.h>
+
 using namespace sonar_pointcloud;
 
 /**
