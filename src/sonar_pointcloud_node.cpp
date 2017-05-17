@@ -8,6 +8,9 @@
 */
 
 #include <sonar_pointcloud/sonar_pointcloud.h>
+#include <sonar_pointcloud/SonarPrecipitator.h>
+
+using namespace sonar_pointcloud;
 
 /**
     Entry point for ROS Node Execution
@@ -19,13 +22,13 @@
 
 int main(int argc, char** argv) {
     // ros::init must be the first call in main()
-    ros::init(argc, argv, sonar_pointcloud::ROS_PREFIX);
+    ros::init(argc, argv, ROS_PREFIX);
     ros::NodeHandle nh;
 
-    ROS_INFO("%s: v%s", sonar_pointcloud::ROS_PREFIX.c_str(), sonar_pointcloud::VERSION_STRING.c_str());
+    ROS_INFO("%s: v%s", ROS_PREFIX.c_str(), VERSION_STRING.c_str());
 
     // Remap and resolve Topic Names
-    std::string pointcloudTopic = ros::names::append(sonar_pointcloud::ROS_PREFIX, "pointcloud");
+    std::string pointcloudTopic = ros::names::append(ROS_PREFIX, "pointcloud");
     if (ros::names::remap(pointcloudTopic) != pointcloudTopic) {
         pointcloudTopic = ros::names::remap(pointcloudTopic);
     }
@@ -33,8 +36,10 @@ int main(int argc, char** argv) {
     ROS_INFO("Pointcloud Topic mapped to: %s", pointcloudTopic.c_str());
 
     // TODO: Read Parameters for Topics, Sonar Transforms, etc.
+    std::string pointcloudFrame;
 
     // TODO: Create SonarPrecipitator Object
+    SonarPrecipitator precipitator(pointcloudTopic, pointcloudFrame);
 
     // TODO: Add Sonar Topics to SonarPrecipitator
 
