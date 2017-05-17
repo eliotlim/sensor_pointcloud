@@ -12,8 +12,11 @@
 
 #include "sonar_pointcloud.h"
 
+#include <boost/thread.hpp>
+
 #include <sensor_msgs/Range.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <pcl_ros/point_cloud.h>
 #include <tf2_ros/transform_listener.h>
 #include <tf2/LinearMath/Quaternion.h>
 
@@ -23,14 +26,20 @@ class SonarPrecipitator {
 public:
     SonarPrecipitator(const std::string& pointcloudTopic, const std::string& pointcloudFrame);
     ~SonarPrecipitator() {}
+    void addSonar(const std::string& sonarTopic, const std::string& sonarFrame);
 
 private:
+    void publishCallable();
+
     ros::NodeHandle nodeHandle;
     ros::Publisher pointcloudPublisher;
+    boost::thread publishThread;
+    double publishRate;
 
     std::string pointcloudFrame;
     tf2_ros::Buffer tfBuffer;
     tf2_ros::TransformListener tfListener;
+
 };
 
 }

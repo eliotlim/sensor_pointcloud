@@ -38,10 +38,12 @@ int main(int argc, char** argv) {
     // TODO: Read Parameters for Topics, Sonar Transforms, etc.
     std::string pointcloudFrame;
 
-    // TODO: Create SonarPrecipitator Object
+    // Create SonarPrecipitator Object
     SonarPrecipitator precipitator(pointcloudTopic, pointcloudFrame);
 
     // TODO: Add Sonar Topics to SonarPrecipitator
+    std::string sonarTopic, sonarFrame;
+    precipitator.addSonar(sonarTopic, sonarFrame);
 
     // Process all event callbacks
     ros::spin();
