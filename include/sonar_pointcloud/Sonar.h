@@ -22,10 +22,12 @@ public:
     ~Sonar() {}
 
     void rangeCallback(const sensor_msgs::Range& range_msg);
+    float getRange();
 
-private:
     std::string sonarTopic;
     std::string sonarFrame;
+
+private:
     ros::Subscriber rangeSubscriber;
     sensor_msgs::Range range_msg;
 

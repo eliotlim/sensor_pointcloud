@@ -18,7 +18,9 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl_ros/point_cloud.h>
 #include <tf2_ros/transform_listener.h>
-#include <tf2/LinearMath/Quaternion.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <geometry_msgs/PointStamped.h>
+#include <geometry_msgs/TransformStamped.h>
 
 namespace sonar_pointcloud {
 

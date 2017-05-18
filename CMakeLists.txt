@@ -11,10 +11,14 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_ros
   roscpp
   rospy
-  sensor_msgs
   std_msgs
+  sensor_msgs
+  geometry_msgs
   tf2
+  tf2_geometry_msgs
 )
+
+find_package(orocos_kdl REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -108,7 +112,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
   LIBRARIES sonar_pointcloud
-  CATKIN_DEPENDS pcl_ros roscpp rospy sensor_msgs std_msgs tf2
+  CATKIN_DEPENDS pcl_ros roscpp rospy std_msgs sensor_msgs geometry_msgs tf2 tf2_geometry_msgs
 #  DEPENDS system_lib
 )
 
@@ -153,6 +157,7 @@ add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catk
 target_link_libraries(${PROJECT_NAME}_node
   ${catkin_LIBRARIES}
   ${PROJECT_NAME}
+  ${orocos_kdl_LIBRARIES}
 )
 
 #############
