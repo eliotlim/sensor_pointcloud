@@ -13,23 +13,29 @@
 #include "sonar_pointcloud.h"
 
 #include <sensor_msgs/Range.h>
+#include <geometry_msgs/TransformStamped.h>
 
 namespace sonar_pointcloud {
 
 class Sonar {
 public:
-    Sonar(const std::string& sonarTopic, const std::string& sonarFrame);
-    ~Sonar() {}
+    Sonar(std::string sonarTopic, std::string sonarFrame);
+    //~Sonar() {}
 
     void rangeCallback(const sensor_msgs::Range& range_msg);
+    void setTransform(const geometry_msgs::TransformStamped transformS);
+    geometry_msgs::TransformStamped getTransform();
     float getRange();
 
     std::string topic;
     std::string frame;
 
+    bool transform;
+
 private:
     ros::Subscriber rangeSubscriber;
-    sensor_msgs::Range range_msg;
+    boost::shared_ptr<sensor_msgs::Range> range_msg;
+    boost::shared_ptr<geometry_msgs::TransformStamped> transformS;
 
     ros::NodeHandle nodeHandle;
 };

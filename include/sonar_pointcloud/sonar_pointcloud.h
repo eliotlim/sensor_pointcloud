@@ -12,6 +12,7 @@
 
 #include <string>
 #include <vector>
+#include <boost/smart_ptr.hpp>
 
 #include <ros/ros.h>
 

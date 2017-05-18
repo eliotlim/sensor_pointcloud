@@ -56,7 +56,7 @@ using namespace sonar_pointcloud;
     @param pointcloudFrame TF2 Frame for point cloud origin
 */
 
-SonarPrecipitator::SonarPrecipitator(const std::string& pointcloudTopic, const std::string& pointcloudFrame) :
+SonarPrecipitator::SonarPrecipitator(std::string pointcloudTopic, std::string pointcloudFrame) :
                                      frame(pointcloudFrame), tfListener(tfBuffer) {
     // ROS Setup
     nodeHandle = ros::NodeHandle();
@@ -76,8 +76,10 @@ SonarPrecipitator::SonarPrecipitator(const std::string& pointcloudTopic, const s
     @param pointcloudFrame TF2 Frame for Sonar Orientation
 */
 
-void SonarPrecipitator::addSonar(const std::string& sonarTopic, const std::string& sonarFrame) {
-    sonars.push_back(Sonar(sonarTopic, sonarFrame));
+boost::shared_ptr<Sonar> SonarPrecipitator::addSonar(std::string sonarTopic, std::string sonarFrame) {
+    boost::shared_ptr<Sonar> sonarPtr(new Sonar(sonarTopic, sonarFrame));
+    sonars.push_back(sonarPtr);
+    return sonarPtr;
 }
 
 /**
@@ -94,17 +96,25 @@ void SonarPrecipitator::publishCallable() {
         pointCloud->height = 1;
 
         // TODO: Convert all Sonar readings to Points
-        std::vector<Sonar>::iterator sonarIt;
+        std::vector<boost::shared_ptr<Sonar> >::iterator sonarIt;
         for (sonarIt = sonars.begin(); sonarIt != sonars.end(); sonarIt++) {
+            boost::shared_ptr<Sonar> sonar = *sonarIt;
             // Check Sonar Range Validity
-            if (sonarIt->getRange() < 0) { continue; }
+            if (sonar->getRange() < 0) { continue; }
+
+            // Publish Sonar transform if applicable
+            if (sonar->transform) {
+                sonar->getTransform().header.stamp = ros::Time::now();
+                tfBroadcaster.sendTransform(sonar->getTransform());
+            }
+
             // Get StampedTransform for Sonar
             geometry_msgs::TransformStamped transform;
             try {
                 // Calling lookupTransform with ros::Time(0)
                 // results in the latest available transform
                 transform = tfBuffer.lookupTransform(pointCloud->header.frame_id,
-                                                     sonarIt->frame,
+                                                     sonar->frame,
                                                      ros::Time(0));
             } catch (tf2::TransformException ex) {
                 ROS_WARN("Sonar Transform Error: %s", ex.what());
@@ -113,7 +123,7 @@ void SonarPrecipitator::publishCallable() {
 
             // Transform the range reading into a point
             geometry_msgs::PointStamped pt;
-            pt.point.x = sonarIt->getRange();
+            pt.point.x = sonar->getRange();
             geometry_msgs::PointStamped pointOut;
             tf2::doTransform(pt, pointOut, transform);
 

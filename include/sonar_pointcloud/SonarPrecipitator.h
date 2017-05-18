@@ -18,6 +18,7 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl_ros/point_cloud.h>
 #include <tf2_ros/transform_listener.h>
+#include <tf2_ros/transform_broadcaster.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <geometry_msgs/PointStamped.h>
 #include <geometry_msgs/TransformStamped.h>
@@ -26,9 +27,9 @@ namespace sonar_pointcloud {
 
 class SonarPrecipitator {
 public:
-    SonarPrecipitator(const std::string& pointcloudTopic, const std::string& pointcloudFrame);
+    SonarPrecipitator(const std::string pointcloudTopic, const std::string pointcloudFrame);
     ~SonarPrecipitator() {}
-    void addSonar(const std::string& sonarTopic, const std::string& sonarFrame);
+    boost::shared_ptr<Sonar> addSonar(const std::string sonarTopic, const std::string sonarFrame);
 
 private:
     void publishCallable();
@@ -41,8 +42,9 @@ private:
     std::string frame;
     tf2_ros::Buffer tfBuffer;
     tf2_ros::TransformListener tfListener;
+    tf2_ros::TransformBroadcaster tfBroadcaster;
 
-    std::vector<sonar_pointcloud::Sonar> sonars;
+    std::vector<boost::shared_ptr<sonar_pointcloud::Sonar> > sonars;
 
 };
 

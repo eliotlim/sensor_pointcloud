@@ -18,6 +18,8 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_geometry_msgs
 )
 
+find_package(Boost REQUIRED)
+
 find_package(orocos_kdl REQUIRED)
 
 ## System dependencies are found with CMake's conventions
@@ -125,6 +127,7 @@ catkin_package(
 include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library

@@ -45,7 +45,20 @@ int main(int argc, char** argv) {
 
     // TODO: Add Sonar Topics to SonarPrecipitator
     std::string sonarTopic = "/ultrasound/range", sonarFrame = "ultrasound";
-    precipitator.addSonar(sonarTopic, sonarFrame);
+    boost::shared_ptr<Sonar> s = precipitator.addSonar(sonarTopic, sonarFrame);
+
+    geometry_msgs::TransformStamped transformStamped;
+    transformStamped.header.frame_id = pointcloudFrame;
+    transformStamped.transform.translation.x = 0.0;
+    transformStamped.transform.translation.y = 0.8;
+    transformStamped.transform.translation.z = 0.0;
+    tf2::Quaternion q;
+    q.setRPY(0, 0, 0);
+    transformStamped.transform.rotation.x = q.x();
+    transformStamped.transform.rotation.y = q.y();
+    transformStamped.transform.rotation.z = q.z();
+    transformStamped.transform.rotation.w = q.w();
+    s->setTransform(transformStamped);
 
     ROS_INFO("Sonars added");
 
