@@ -36,14 +36,18 @@ int main(int argc, char** argv) {
     ROS_INFO("Pointcloud Topic mapped to: %s", pointcloudTopic.c_str());
 
     // TODO: Read Parameters for Topics, Sonar Transforms, etc.
-    std::string pointcloudFrame;
+    std::string pointcloudFrame = "base";
 
     // Create SonarPrecipitator Object
     SonarPrecipitator precipitator(pointcloudTopic, pointcloudFrame);
 
+    ROS_INFO("SonarPrecipitator created");
+
     // TODO: Add Sonar Topics to SonarPrecipitator
-    std::string sonarTopic, sonarFrame;
+    std::string sonarTopic = "/ultrasound/range", sonarFrame = "ultrasound";
     precipitator.addSonar(sonarTopic, sonarFrame);
+
+    ROS_INFO("Sonars added");
 
     // Process all event callbacks
     ros::spin();

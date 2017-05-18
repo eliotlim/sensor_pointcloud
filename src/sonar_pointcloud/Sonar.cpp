@@ -12,7 +12,7 @@
 using namespace sonar_pointcloud;
 
 Sonar::Sonar(const std::string& sonarTopic, const std::string& sonarFrame) :
-             sonarTopic(sonarTopic), sonarFrame(sonarFrame) {
+             topic(sonarTopic), frame(sonarFrame) {
     // ROS Setup
     nodeHandle = ros::NodeHandle();
     rangeSubscriber = nodeHandle.subscribe(sonarTopic, 20, &Sonar::rangeCallback, this);
@@ -26,10 +26,17 @@ Sonar::Sonar(const std::string& sonarTopic, const std::string& sonarFrame) :
 */
 
 void Sonar::rangeCallback(const sensor_msgs::Range& range_msg) {
-    if (sonarFrame.compare(range_msg.header.frame_id) != 0) {
+    if (frame.compare(range_msg.header.frame_id) != 0) {
         this->range_msg = range_msg;
     }
 }
+
+/**
+    getRange
+    Return the range from most recent range_msg
+
+    @return range
+*/
 
 float Sonar::getRange() {
     if (range_msg.range < range_msg.min_range || range_msg.range > range_msg.max_range) {

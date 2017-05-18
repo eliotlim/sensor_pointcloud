@@ -57,13 +57,14 @@ using namespace sonar_pointcloud;
 */
 
 SonarPrecipitator::SonarPrecipitator(const std::string& pointcloudTopic, const std::string& pointcloudFrame) :
-                                     pointcloudFrame(pointcloudFrame), tfListener(tfBuffer) {
+                                     frame(pointcloudFrame), tfListener(tfBuffer) {
     // ROS Setup
     nodeHandle = ros::NodeHandle();
     pointcloudPublisher = nodeHandle.advertise<sensor_msgs::PointCloud2> (pointcloudTopic, 3);
 
     // Start publisher thread
     // Refer to http://stackoverflow.com/questions/4581476/using-boost-thread-and-a-non-static-class-function
+    publishRate = 20;
     publishThread = boost::thread(boost::bind(&SonarPrecipitator::publishCallable, this));
 }
 
@@ -89,7 +90,7 @@ void SonarPrecipitator::publishCallable() {
     ros::Rate loopRate(publishRate);
     while (ros::ok()) {
         pcl::PointCloud<pcl::PointXYZ>::Ptr pointCloud(new pcl::PointCloud<pcl::PointXYZ>());
-        pointCloud->header.frame_id = pointcloudFrame;
+        pointCloud->header.frame_id = frame;
         pointCloud->height = 1;
 
         // TODO: Convert all Sonar readings to Points
@@ -103,7 +104,7 @@ void SonarPrecipitator::publishCallable() {
                 // Calling lookupTransform with ros::Time(0)
                 // results in the latest available transform
                 transform = tfBuffer.lookupTransform(pointCloud->header.frame_id,
-                                                     sonarIt->sonarFrame,
+                                                     sonarIt->frame,
                                                      ros::Time(0));
             } catch (tf2::TransformException ex) {
                 ROS_WARN("Sonar Transform Error: %s", ex.what());

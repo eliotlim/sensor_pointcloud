@@ -24,8 +24,8 @@ public:
     void rangeCallback(const sensor_msgs::Range& range_msg);
     float getRange();
 
-    std::string sonarTopic;
-    std::string sonarFrame;
+    std::string topic;
+    std::string frame;
 
 private:
     ros::Subscriber rangeSubscriber;

@@ -38,7 +38,7 @@ private:
     boost::thread publishThread;
     double publishRate;
 
-    std::string pointcloudFrame;
+    std::string frame;
     tf2_ros::Buffer tfBuffer;
     tf2_ros::TransformListener tfListener;
 
