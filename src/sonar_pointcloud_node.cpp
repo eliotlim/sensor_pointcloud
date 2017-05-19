@@ -33,33 +33,67 @@ int main(int argc, char** argv) {
         pointcloudTopic = ros::names::remap(pointcloudTopic);
     }
     std::string parent_namespace = ros::names::parentNamespace(pointcloudTopic);
-    ROS_INFO("Pointcloud Topic mapped to: %s", pointcloudTopic.c_str());
+    ROS_INFO("Pointcloud Topic : %s", pointcloudTopic.c_str());
 
     // TODO: Read Parameters for Topics, Sonar Transforms, etc.
-    std::string pointcloudFrame = "base";
+    std::string pointcloudFrame;
+    nh.param<std::string>("/sonar_pointcloud/pointcloudFrame", pointcloudFrame, "map");
+    ROS_INFO("Pointcloud Frame : %s", pointcloudFrame.c_str());
 
     // Create SonarPrecipitator Object
     SonarPrecipitator precipitator(pointcloudTopic, pointcloudFrame);
 
     ROS_INFO("SonarPrecipitator created");
 
-    // TODO: Add Sonar Topics to SonarPrecipitator
-    std::string sonarTopic = "/ultrasound/range", sonarFrame = "ultrasound";
-    boost::shared_ptr<Sonar> s = precipitator.addSonar(sonarTopic, sonarFrame);
+    // Add Sonar Topics to SonarPrecipitator
+    std::vector<std::string> sonars;
+    nh.getParam("sonars", sonars);
+    if (sonars.size() == 0) ROS_WARN("No Sonars configured");
 
-    // TODO: Read and set sensor transform from parameters
-    geometry_msgs::TransformStamped transformStamped;
-    transformStamped.header.frame_id = pointcloudFrame;
-    transformStamped.transform.translation.x = 0.0;
-    transformStamped.transform.translation.y = 0.8;
-    transformStamped.transform.translation.z = 0.0;
-    tf2::Quaternion q;
-    q.setRPY(0, 0, 0);
-    transformStamped.transform.rotation.x = q.x();
-    transformStamped.transform.rotation.y = q.y();
-    transformStamped.transform.rotation.z = q.z();
-    transformStamped.transform.rotation.w = q.w();
-    s->setTransform(transformStamped);
+    for (std::vector<std::string>::iterator sonarNameIt = sonars.begin(); sonarNameIt != sonars.end(); ++sonarNameIt) {
+        std::string sonarTopic, sonarFrame;
+        nh.getParam(*sonarNameIt + "/topic", sonarTopic);
+        nh.getParam(*sonarNameIt + "/transform/frame", sonarFrame);
+        ROS_INFO("Sonar Parameters Loaded - Topic: %s Frame: %s", sonarTopic.c_str(), sonarFrame.c_str());
+
+        boost::shared_ptr<Sonar> s = precipitator.addSonar(sonarTopic, sonarFrame);
+
+        // Determine if transform is defined in yaml
+        bool loadTransform = false;
+        double translation[3] = {0, 0, 0};
+        // Load x/y/z parameters
+        for (char c = 'x'; c <= 'z'; c++) {
+            std::string paramStr = *sonarNameIt + "/transform/" + c;
+            if (nh.getParam(paramStr, translation[c - 'x'])) {
+                loadTransform = true;
+                ROS_INFO("Loading Transform for %s: %f", paramStr.c_str(), translation[c-'x']);
+            }
+        }
+        if (loadTransform) {
+            // Load roll/pitch/yaw parameters - WILL NOT LOAD IF x/y/z not set
+            tf2::Quaternion q;
+            float roll = 0, pitch = 0, yaw = 0;
+            nh.getParam(*sonarNameIt + "/transform/r", roll);
+            nh.getParam(*sonarNameIt + "/transform/p", pitch);
+            nh.getParam(*sonarNameIt + "/transform/y", yaw);
+            q.setRPY(roll, pitch, yaw);
+
+            // Set sensor transform from parameters
+            geometry_msgs::TransformStamped transformStamped;
+            transformStamped.header.frame_id = pointcloudFrame;
+            transformStamped.transform.translation.x = translation[0];
+            transformStamped.transform.translation.y = translation[1];
+            transformStamped.transform.translation.z = translation[2];
+            transformStamped.transform.rotation.x = q.x();
+            transformStamped.transform.rotation.y = q.y();
+            transformStamped.transform.rotation.z = q.z();
+            transformStamped.transform.rotation.w = q.w();
+            s->setTransform(transformStamped);
+            ROS_INFO("Sonar Transform Loaded - Frame: %s (%.2f, %.2f, %.2f) rot: {%.2f, %.2f, %.2f}",
+                     sonarFrame.c_str(), translation[0], translation[1], translation[2],
+                     roll, pitch, yaw);
+        }
+    }
 
     ROS_INFO("Sonars added");
 

@@ -1,0 +1,26 @@
+%YAML 1.2
+---
+# Configuration
+sonar_pointcloud:
+    pointcloudFrame: map
+
+# List of Sonars
+sonars:
+    - sonar0
+    - sonar1
+
+sonar0:
+    topic: ultrasound/sonar
+    transform:
+        frame: sonar0
+        x: 2.3
+        y: 0.8
+        z: 2.5
+        r: 0
+        p: 0
+        y: 0
+sonar1:
+    topic: ultrasound/sonar
+    transform:
+        frame: sonar1
+...
