@@ -1,0 +1,3 @@
+<launch>
+    <node name="sonar_pointcloud_node" pkg="sonar_pointcloud" type="sonar_pointcloud_node" />
+</launch>
