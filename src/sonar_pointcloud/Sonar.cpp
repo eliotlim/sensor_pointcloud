@@ -53,7 +53,7 @@ geometry_msgs::TransformStamped Sonar::getTransform() { return *transformS; }
 
 void Sonar::rangeCallback(const sensor_msgs::Range& range_msg) {
     // Check if frame matches range_msg frame_id
-    if (frame.compare(range_msg.header.frame_id) != 0) {
+    if (frame.compare(range_msg.header.frame_id) == 0) {
         this->range_msg = boost::shared_ptr<sensor_msgs::Range>(new sensor_msgs::Range(range_msg));
     }
 }

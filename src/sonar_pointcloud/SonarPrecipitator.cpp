@@ -81,6 +81,7 @@ SonarPrecipitator::SonarPrecipitator(std::string pointcloudTopic, std::string po
 boost::shared_ptr<Sonar> SonarPrecipitator::addSonar(std::string sonarTopic, std::string sonarFrame) {
     boost::shared_ptr<Sonar> sonarPtr(new Sonar(sonarTopic, sonarFrame));
     sonars.push_back(sonarPtr);
+    ROS_DEBUG("Inserted Sonar - Topic: %s, Frame: %s", sonarTopic.c_str(), sonarFrame.c_str());
     return sonarPtr;
 }
 
@@ -99,7 +100,7 @@ void SonarPrecipitator::publishCallable() {
 
         // Convert all Sonar readings to Points
         std::vector<boost::shared_ptr<Sonar> >::iterator sonarIt;
-        for (sonarIt = sonars.begin(); sonarIt != sonars.end(); sonarIt++) {
+        for (sonarIt = sonars.begin(); sonarIt != sonars.end(); ++sonarIt) {
             boost::shared_ptr<Sonar> sonar = *sonarIt;
             // Check Sonar Range Validity
             if (sonar->getRange() < 0) { continue; }
