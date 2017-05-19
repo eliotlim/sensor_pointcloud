@@ -47,6 +47,7 @@ int main(int argc, char** argv) {
     std::string sonarTopic = "/ultrasound/range", sonarFrame = "ultrasound";
     boost::shared_ptr<Sonar> s = precipitator.addSonar(sonarTopic, sonarFrame);
 
+    // TODO: Read and set sensor transform from parameters
     geometry_msgs::TransformStamped transformStamped;
     transformStamped.header.frame_id = pointcloudFrame;
     transformStamped.transform.translation.x = 0.0;

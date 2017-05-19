@@ -2,6 +2,7 @@
     SonarPrecipitator Class
     SonarPrecipitator.h
     Purpose: Class that converts `range msg` and `transforms` into PointCloud2
+    Also publishes sensor frame transforms if defined.
 
     Adapted from http://docs.ros.org/hydro/api/segbot_sensors/html/range__to__cloud_8cpp_source.html
     See license agreement for adaptation below
@@ -74,6 +75,7 @@ SonarPrecipitator::SonarPrecipitator(std::string pointcloudTopic, std::string po
 
     @param sonarTopic Input topic for `range_msg`
     @param pointcloudFrame TF2 Frame for Sonar Orientation
+    @return boost::shared_ptr<Sonar> smart pointer to sonar object
 */
 
 boost::shared_ptr<Sonar> SonarPrecipitator::addSonar(std::string sonarTopic, std::string sonarFrame) {
@@ -95,7 +97,7 @@ void SonarPrecipitator::publishCallable() {
         pointCloud->header.frame_id = frame;
         pointCloud->height = 1;
 
-        // TODO: Convert all Sonar readings to Points
+        // Convert all Sonar readings to Points
         std::vector<boost::shared_ptr<Sonar> >::iterator sonarIt;
         for (sonarIt = sonars.begin(); sonarIt != sonars.end(); sonarIt++) {
             boost::shared_ptr<Sonar> sonar = *sonarIt;

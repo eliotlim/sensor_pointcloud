@@ -2,18 +2,18 @@
 <package>
   <name>sonar_pointcloud</name>
   <version>0.0.1</version>
-  <description>The sonar_pointcloud package</description>
+  <description>Aggregate and convert range_msgs to PointCloud2</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="eliot@todo.todo">eliot</maintainer>
+  <maintainer email="eliot.lim@gmail.com">eliot</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
   <!-- Commonly used license strings: -->
   <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
-  <license>TODO</license>
+  <license>MIT</license>
 
 
   <!-- Url tags are optional, but multiple are allowed, one per tag -->

@@ -2,6 +2,7 @@
     SonarPrecipitator Class
     SonarPrecipitator.h
     Purpose: Class that converts `range msg` and `transforms` into PointCloud2
+    Also publishes sensor frame transforms if defined.
 
     @author Eliot Lim (github: @eliotlim)
     @version 1.0 (16/5/17)
