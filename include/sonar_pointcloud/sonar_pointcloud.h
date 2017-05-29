@@ -18,7 +18,7 @@
 
 namespace sonar_pointcloud {
     const std::string ROS_PREFIX = "sonar_pointcloud";
-    const std::string VERSION_STRING = "0.0.1";
+    const std::string VERSION_STRING = "0.1.0";
 }
 
 #endif

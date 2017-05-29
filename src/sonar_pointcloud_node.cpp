@@ -62,20 +62,20 @@ int main(int argc, char** argv) {
         bool loadTransform = false;
         double translation[3] = {0, 0, 0};
         // Load x/y/z parameters
-        for (char c = 'x'; c <= 'z'; c++) {
-            std::string paramStr = *sonarNameIt + "/transform/" + c;
-            if (nh.getParam(paramStr, translation[c - 'x'])) {
+        for (char c = 'X'; c <= 'Z'; c++) {
+            std::string paramStr = *sonarNameIt + "/transform/pos" + c;
+            if (nh.getParam(paramStr, translation[c - 'X'])) {
                 loadTransform = true;
-                ROS_INFO("Loading Transform for %s: %f", paramStr.c_str(), translation[c-'x']);
+                ROS_INFO("Loading Transform for %s: %f", paramStr.c_str(), translation[c-'X']);
             }
         }
         if (loadTransform) {
             // Load roll/pitch/yaw parameters - WILL NOT LOAD IF x/y/z not set
             tf2::Quaternion q;
             float roll = 0, pitch = 0, yaw = 0;
-            nh.getParam(*sonarNameIt + "/transform/r", roll);
-            nh.getParam(*sonarNameIt + "/transform/p", pitch);
-            nh.getParam(*sonarNameIt + "/transform/y", yaw);
+            nh.getParam(*sonarNameIt + "/transform/roll", roll);
+            nh.getParam(*sonarNameIt + "/transform/pitch", pitch);
+            nh.getParam(*sonarNameIt + "/transform/yaw", yaw);
             q.setRPY(roll, pitch, yaw);
 
             // Set sensor transform from parameters
