@@ -8,19 +8,58 @@ sonar_pointcloud:
 sonars:
     - sonar0
     - sonar1
+    - sonar2
+    - sonar3
+    - sonar4
 
 sonar0:
-    topic: ultrasound/sonar
+    topic: ultrasound/range
     transform:
         frame: sonar0
-        posX: 2.3
-        posY: 0.8
-        posZ: 2.5
+        posX: 1
+        posY: -1
+        posZ: 1
         roll: 0
         pitch: 0
-        yaw: 0
+        yaw: deg(-30)
 sonar1:
-    topic: ultrasound/sonar
+    topic: ultrasound/range
     transform:
         frame: sonar1
+        posX: 1
+        posY: -0.5
+        posZ: 1
+        roll: 0
+        pitch: 0
+        yaw: deg(-15)
+sonar2:
+    topic: ultrasound/range
+    transform:
+        frame: sonar2
+        posX: 1
+        posY: 0
+        posZ: 1
+        roll: 0
+        pitch: 0
+        yaw: deg(0)
+sonar3:
+    topic: ultrasound/range
+    transform:
+        frame: sonar3
+        posX: 1
+        posY: 0.5
+        posZ: 1
+        roll: 0
+        pitch: 0
+        yaw: deg(15)
+sonar4:
+    topic: ultrasound/range
+    transform:
+        frame: sonar4
+        posX: 1
+        posY: 1
+        posZ: 1
+        roll: 0
+        pitch: 0
+        yaw: deg(30)
 ...

@@ -97,19 +97,21 @@ void SonarPrecipitator::publishCallable() {
         pcl::PointCloud<pcl::PointXYZ>::Ptr pointCloud(new pcl::PointCloud<pcl::PointXYZ>());
         pointCloud->header.frame_id = frame;
         pointCloud->height = 1;
+        pointCloud->points.clear();
 
         // Convert all Sonar readings to Points
         std::vector<boost::shared_ptr<Sonar> >::iterator sonarIt;
         for (sonarIt = sonars.begin(); sonarIt != sonars.end(); ++sonarIt) {
             boost::shared_ptr<Sonar> sonar = *sonarIt;
-            // Check Sonar Range Validity
-            if (sonar->getRange() < 0) { continue; }
 
             // Publish Sonar transform if applicable
             if (sonar->transform) {
                 sonar->getTransform().header.stamp = ros::Time::now();
                 tfBroadcaster.sendTransform(sonar->getTransform());
             }
+
+            // Check Sonar Range Validity
+            if (sonar->getRange() < 0) { continue; }
 
             // Get StampedTransform for Sonar
             geometry_msgs::TransformStamped transform;
