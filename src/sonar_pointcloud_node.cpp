@@ -35,9 +35,9 @@ int main(int argc, char** argv) {
     std::string parent_namespace = ros::names::parentNamespace(pointcloudTopic);
     ROS_INFO("Pointcloud Topic : %s", pointcloudTopic.c_str());
 
-    // TODO: Read Parameters for Topics, Sonar Transforms, etc.
+    // \Read Parameters for Topics, Sonar Transforms, etc.
     std::string pointcloudFrame;
-    nh.param<std::string>("/sonar_pointcloud/pointcloudFrame", pointcloudFrame, "map");
+    nh.param<std::string>(ros::names::append(parent_namespace, "pointcloudFrame"), pointcloudFrame, "map");
     ROS_INFO("Pointcloud Frame : %s", pointcloudFrame.c_str());
 
     // Create SonarPrecipitator Object
