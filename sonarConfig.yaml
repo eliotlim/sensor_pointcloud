@@ -16,50 +16,50 @@ sonar0:
     topic: ultrasound/range
     transform:
         frame: sonar0
-        posX: 1
-        posY: -1
-        posZ: 1
-        roll: 0
-        pitch: 0
-        yaw: deg(-30)
+        posX: 0.03
+        posY: -0.07
+        posZ: 0.05
+        roll: deg(0)
+        pitch: deg(0)
+        yaw: deg(-90)
 sonar1:
     topic: ultrasound/range
     transform:
         frame: sonar1
-        posX: 1
-        posY: -0.5
-        posZ: 1
-        roll: 0
-        pitch: 0
-        yaw: deg(-15)
+        posX: 0.08
+        posY: -0.05
+        posZ: 0.05
+        roll: deg(0)
+        pitch: deg(0)
+        yaw: deg(-45)
 sonar2:
     topic: ultrasound/range
     transform:
         frame: sonar2
-        posX: 1
-        posY: 0
-        posZ: 1
-        roll: 0
-        pitch: 0
+        posX: 0.10
+        posY: 0.0
+        posZ: 0.05
+        roll: deg(0)
+        pitch: deg(0)
         yaw: deg(0)
 sonar3:
     topic: ultrasound/range
     transform:
         frame: sonar3
-        posX: 1
-        posY: 0.5
-        posZ: 1
-        roll: 0
-        pitch: 0
-        yaw: deg(15)
+        posX: 0.08
+        posY: 0.05
+        posZ: 0.05
+        roll: deg(0)
+        pitch: deg(0)
+        yaw: deg(45)
 sonar4:
     topic: ultrasound/range
     transform:
         frame: sonar4
-        posX: 1
-        posY: 1
-        posZ: 1
-        roll: 0
-        pitch: 0
-        yaw: deg(30)
+        posX: 0.03
+        posY: 0.07
+        posZ: 0.05
+        roll: deg(0)
+        pitch: deg(0)
+        yaw: deg(90)
 ...
