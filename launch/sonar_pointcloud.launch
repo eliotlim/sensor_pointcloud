@@ -1,4 +1,0 @@
-<launch>
-    <rosparam command="load" file="$(find sonar_pointcloud)/sonarConfig.yaml" />
-    <node name="sonar_pointcloud_node" pkg="sonar_pointcloud" type="sonar_pointcloud_node" />
-</launch>

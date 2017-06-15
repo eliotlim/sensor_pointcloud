@@ -1,16 +1,16 @@
 /**
-    sonar_pointcloud
-    sonar_pointcloud_node.h
-    Purpose: ROS Node for creating and managing sonar_pointcloud instances
+    sensor_pointcloud
+    sensor_pointcloud_node.h
+    Purpose: ROS Node for creating and managing sensor_pointcloud instances
 
     @author Eliot Lim (github: @eliotlim)
     @version 1.0 (16/5/17)
 */
 
-#include <sonar_pointcloud/sonar_pointcloud.h>
-#include <sonar_pointcloud/SonarPrecipitator.h>
+#include <sensor_pointcloud/sensor_pointcloud.h>
+#include <sensor_pointcloud/SensorPrecipitator.h>
 
-using namespace sonar_pointcloud;
+using namespace sensor_pointcloud;
 
 /**
     Entry point for ROS Node Execution
@@ -35,35 +35,35 @@ int main(int argc, char** argv) {
     std::string parent_namespace = ros::names::parentNamespace(pointcloudTopic);
     ROS_INFO("Pointcloud Topic : %s", pointcloudTopic.c_str());
 
-    // \Read Parameters for Topics, Sonar Transforms, etc.
+    // \Read Parameters for Topics, Sensor Transforms, etc.
     std::string pointcloudFrame;
     nh.param<std::string>(ros::names::append(parent_namespace, "pointcloudFrame"), pointcloudFrame, "map");
     ROS_INFO("Pointcloud Frame : %s", pointcloudFrame.c_str());
 
-    // Create SonarPrecipitator Object
-    SonarPrecipitator precipitator(pointcloudTopic, pointcloudFrame);
+    // Create SensorPrecipitator Object
+    SensorPrecipitator precipitator(pointcloudTopic, pointcloudFrame);
 
-    ROS_INFO("SonarPrecipitator created");
+    ROS_INFO("SensorPrecipitator created");
 
-    // Add Sonar Topics to SonarPrecipitator
-    std::vector<std::string> sonars;
-    nh.getParam("sonars", sonars);
-    if (sonars.size() == 0) ROS_WARN("No Sonars configured");
+    // Add Sensor Topics to SensorPrecipitator
+    std::vector<std::string> sensors;
+    nh.getParam("sensors", sensors);
+    if (sensors.size() == 0) ROS_WARN("No sensors configured");
 
-    for (std::vector<std::string>::iterator sonarNameIt = sonars.begin(); sonarNameIt != sonars.end(); ++sonarNameIt) {
-        std::string sonarTopic, sonarFrame;
-        nh.getParam(*sonarNameIt + "/topic", sonarTopic);
-        nh.getParam(*sonarNameIt + "/transform/frame", sonarFrame);
-        ROS_INFO("Sonar Parameters Loaded - Topic: %s Frame: %s", sonarTopic.c_str(), sonarFrame.c_str());
+    for (std::vector<std::string>::iterator sensorNameIt = sensors.begin(); sensorNameIt != sensors.end(); ++sensorNameIt) {
+        std::string sensorTopic, sensorFrame;
+        nh.getParam(*sensorNameIt + "/topic", sensorTopic);
+        nh.getParam(*sensorNameIt + "/transform/frame", sensorFrame);
+        ROS_INFO("Sensor Parameters Loaded - Topic: %s Frame: %s", sensorTopic.c_str(), sensorFrame.c_str());
 
-        boost::shared_ptr<Sonar> s = precipitator.addSonar(sonarTopic, sonarFrame);
+        boost::shared_ptr<Sensor> s = precipitator.addSensor(sensorTopic, sensorFrame);
 
         // Determine if transform is defined in yaml
         bool loadTransform = false;
         double translation[3] = {0, 0, 0};
         // Load x/y/z parameters
         for (char c = 'X'; c <= 'Z'; c++) {
-            std::string paramStr = *sonarNameIt + "/transform/pos" + c;
+            std::string paramStr = *sensorNameIt + "/transform/pos" + c;
             if (nh.getParam(paramStr, translation[c - 'X'])) {
                 loadTransform = true;
                 ROS_INFO("Loading Transform for %s: %f", paramStr.c_str(), translation[c-'X']);
@@ -73,9 +73,9 @@ int main(int argc, char** argv) {
             // Load roll/pitch/yaw parameters - WILL NOT LOAD IF x/y/z not set
             tf2::Quaternion q;
             float roll = 0, pitch = 0, yaw = 0;
-            nh.getParam(*sonarNameIt + "/transform/roll", roll);
-            nh.getParam(*sonarNameIt + "/transform/pitch", pitch);
-            nh.getParam(*sonarNameIt + "/transform/yaw", yaw);
+            nh.getParam(*sensorNameIt + "/transform/roll", roll);
+            nh.getParam(*sensorNameIt + "/transform/pitch", pitch);
+            nh.getParam(*sensorNameIt + "/transform/yaw", yaw);
             q.setRPY(roll, pitch, yaw);
 
             // Set sensor transform from parameters
@@ -89,13 +89,13 @@ int main(int argc, char** argv) {
             transformStamped.transform.rotation.z = q.z();
             transformStamped.transform.rotation.w = q.w();
             s->setTransform(transformStamped);
-            ROS_INFO("Sonar Transform Loaded - Frame: %s (%.2f, %.2f, %.2f) rot: {%.2f, %.2f, %.2f}",
-                     sonarFrame.c_str(), translation[0], translation[1], translation[2],
+            ROS_INFO("Sensor Transform Loaded - Frame: %s (%.2f, %.2f, %.2f) rot: {%.2f, %.2f, %.2f}",
+                     sensorFrame.c_str(), translation[0], translation[1], translation[2],
                      roll, pitch, yaw);
         }
     }
 
-    ROS_INFO("Sonars added");
+    ROS_INFO("Sensors added");
 
     // Process all event callbacks
     ros::spin();

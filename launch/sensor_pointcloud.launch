@@ -1,0 +1,4 @@
+<launch>
+    <rosparam command="load" file="$(find sensor_pointcloud)/sensorConfig.yaml" />
+    <node name="sensor_pointcloud_node" pkg="sensor_pointcloud" type="sensor_pointcloud_node" />
+</launch>

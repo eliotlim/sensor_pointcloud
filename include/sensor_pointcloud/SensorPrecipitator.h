@@ -1,6 +1,6 @@
 /**
-    SonarPrecipitator Class
-    SonarPrecipitator.h
+    SensorPrecipitator Class
+    SensorPrecipitator.h
     Purpose: Class that converts `range msg` and `transforms` into PointCloud2
     Also publishes sensor frame transforms if defined.
 
@@ -11,8 +11,8 @@
 #ifndef SONAR_PRECIPITATOR_H
 #define SONAR_PRECIPITATOR_H
 
-#include "sonar_pointcloud.h"
-#include "sonar_pointcloud/Sonar.h"
+#include "sensor_pointcloud.h"
+#include "sensor_pointcloud/Sensor.h"
 
 #include <boost/thread.hpp>
 
@@ -24,13 +24,13 @@
 #include <geometry_msgs/PointStamped.h>
 #include <geometry_msgs/TransformStamped.h>
 
-namespace sonar_pointcloud {
+namespace sensor_pointcloud {
 
-class SonarPrecipitator {
+class SensorPrecipitator {
 public:
-    SonarPrecipitator(const std::string pointcloudTopic, const std::string pointcloudFrame);
-    ~SonarPrecipitator() {}
-    boost::shared_ptr<Sonar> addSonar(const std::string sonarTopic, const std::string sonarFrame);
+    SensorPrecipitator(const std::string pointcloudTopic, const std::string pointcloudFrame);
+    ~SensorPrecipitator() {}
+    boost::shared_ptr<Sensor> addSensor(const std::string sensorTopic, const std::string sensorFrame);
 
 private:
     void publishCallable();
@@ -45,7 +45,7 @@ private:
     tf2_ros::TransformListener tfListener;
     tf2_ros::TransformBroadcaster tfBroadcaster;
 
-    std::vector<boost::shared_ptr<sonar_pointcloud::Sonar> > sonars;
+    std::vector<boost::shared_ptr<sensor_pointcloud::Sensor> > sensors;
 
 };
 

@@ -1,29 +1,29 @@
 /**
-    Sonar Class
-    Sonar.h
+    Sensor Class
+    Sensor.h
     Purpose: Class that subscribes to `range_msg`
 
     @author Eliot Lim (github: @eliotlim)
     @version 1.0 (16/5/17)
 */
 
-#include <sonar_pointcloud/Sonar.h>
+#include <sensor_pointcloud/Sensor.h>
 
-using namespace sonar_pointcloud;
+using namespace sensor_pointcloud;
 
 /**
-    Constructor for Sonar
+    Constructor for sensor
     Instantiates topic and frame, and subscribes to the relevant topics
 
-    @param sonarTopic topic for sonar data
-    @param sonarFrame TF2 Frame for sonar sensor
+    @param sensorTopic topic for sensor data
+    @param sensorFrame TF2 Frame for sensor sensor
 */
 
-Sonar::Sonar(std::string sonarTopic, std::string sonarFrame) :
-             topic(sonarTopic), frame(sonarFrame) {
+Sensor::Sensor(std::string sensorTopic, std::string sensorFrame) :
+             topic(sensorTopic), frame(sensorFrame) {
     // ROS Setup
     nodeHandle = ros::NodeHandle();
-    rangeSubscriber = nodeHandle.subscribe(sonarTopic, 20, &Sonar::rangeCallback, this);
+    rangeSubscriber = nodeHandle.subscribe(sensorTopic, 20, &Sensor::rangeCallback, this);
 
     transform = false;
 }
@@ -36,22 +36,22 @@ Sonar::Sonar(std::string sonarTopic, std::string sonarFrame) :
     @param TransformStamped
 */
 
-void Sonar::setTransform(geometry_msgs::TransformStamped transformS) {
+void Sensor::setTransform(geometry_msgs::TransformStamped transformS) {
     transform = true;
     this->transformS = boost::shared_ptr<geometry_msgs::TransformStamped>(new geometry_msgs::TransformStamped(transformS));
     this->transformS->child_frame_id = frame;
 }
 
-geometry_msgs::TransformStamped Sonar::getTransform() { return *transformS; }
+geometry_msgs::TransformStamped Sensor::getTransform() { return *transformS; }
 
 /**
     Range Message Callback
     Process and Store (by copy) received range
 
-    @param range_msg Sonar range message
+    @param range_msg sensor range message
 */
 
-void Sonar::rangeCallback(const sensor_msgs::Range& range_msg) {
+void Sensor::rangeCallback(const sensor_msgs::Range& range_msg) {
     // Check if frame matches range_msg frame_id
     if (frame.compare(range_msg.header.frame_id) == 0) {
         this->range_msg = boost::shared_ptr<sensor_msgs::Range>(new sensor_msgs::Range(range_msg));
@@ -66,7 +66,7 @@ void Sonar::rangeCallback(const sensor_msgs::Range& range_msg) {
     @return range
 */
 
-float Sonar::getRange() {
+float Sensor::getRange() {
     // Check range_msg not NULL and min_range/max_range bounds not exceeded
     if (!range_msg) return -1;
     if (range_msg->range < range_msg->min_range || range_msg->range > range_msg->max_range) {

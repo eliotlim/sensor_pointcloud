@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(sonar_pointcloud)
+project(sensor_pointcloud)
 
 ## Add support for C++11, supported in ROS Kinetic and newer
 # add_definitions(-std=c++11)
@@ -114,7 +114,7 @@ find_package(orocos_kdl REQUIRED)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-  LIBRARIES sonar_pointcloud
+  LIBRARIES sensor_pointcloud
   CATKIN_DEPENDS pcl_ros roscpp rospy std_msgs sensor_msgs geometry_msgs tf2 tf2_geometry_msgs
 #  DEPENDS system_lib
 )
@@ -133,8 +133,8 @@ include_directories(
 
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
-  src/${PROJECT_NAME}/SonarPrecipitator.cpp
-  src/${PROJECT_NAME}/Sonar.cpp
+  src/${PROJECT_NAME}/SensorPrecipitator.cpp
+  src/${PROJECT_NAME}/Sensor.cpp
 )
 
 ## Add cmake target dependencies of the library
@@ -145,7 +145,7 @@ add_library(${PROJECT_NAME}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME}_node src/sonar_pointcloud_node.cpp)
+add_executable(${PROJECT_NAME}_node src/sensor_pointcloud_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -204,7 +204,7 @@ install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_sonar_pointcloud.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_sensor_pointcloud.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

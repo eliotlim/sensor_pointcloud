@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>sonar_pointcloud</name>
+  <name>sensor_pointcloud</name>
   <version>0.1.0</version>
   <description>Aggregate and convert range_msgs to PointCloud2</description>
 

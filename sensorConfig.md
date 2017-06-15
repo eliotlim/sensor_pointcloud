@@ -1,6 +1,6 @@
-# Configuring sonar_pointcloud
+# Configuring sensor_pointcloud
 
-## Using sonarConfig.yml
+## Using sensorConfig.yml
 
 ### Structure
 #### Header
@@ -8,7 +8,7 @@
 %YAML 1.2
 ---
 # Configuration
-sonar_pointcloud:
+sensor_pointcloud:
     pointcloudFrame: map
 ```
 This portion declares:
@@ -17,19 +17,19 @@ This portion declares:
 
 #### List of data sources
 ```
-# List of Sonars
-sonars:
-    - sonar0
+# List of Sensors
+sensors:
+    - sensor0
     ...
-    - sonarX
+    - sensorX
 ```
 
 #### Details for each data source
 ```
-sonar0:
+sensor0:
     topic: ultrasound/range
     transform:
-        frame: sonar0
+        frame: sensor0
         posX: 0.03
         posY: -0.07
         posZ: 0.05
@@ -38,6 +38,6 @@ sonar0:
         yaw: deg(-90)
 ```
 Break it down.
-  1. Identifier `sonar0` as defined in the list of data sources
+  1. Identifier `sensor0` as defined in the list of data sources
   2. Topic on which the device broadcasts `sensor_msgs::Range` messages
   3. (Optional) Transform of the sensor with respect to `pointcloudFrame`

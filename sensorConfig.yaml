@@ -1,61 +1,61 @@
 %YAML 1.2
 ---
 # Configuration
-sonar_pointcloud:
+sensor_pointcloud:
     pointcloudFrame: map
 
-# List of Sonars
-sonars:
-    - sonar0
-    - sonar1
-    - sonar2
-    - sonar3
-    - sonar4
+# List of sensors
+sensors:
+    - sensor0
+    - sensor1
+    - sensor2
+    - sensor3
+    - sensor4
 
-sonar0:
+sensor0:
     topic: ultrasound/range
     transform:
-        frame: sonar0
+        frame: sensor0
         posX: 0.03
         posY: -0.07
         posZ: 0.05
         roll: deg(0)
         pitch: deg(0)
         yaw: deg(-90)
-sonar1:
+sensor1:
     topic: ultrasound/range
     transform:
-        frame: sonar1
+        frame: sensor1
         posX: 0.08
         posY: -0.05
         posZ: 0.05
         roll: deg(0)
         pitch: deg(0)
         yaw: deg(-45)
-sonar2:
+sensor2:
     topic: ultrasound/range
     transform:
-        frame: sonar2
+        frame: sensor2
         posX: 0.10
         posY: 0.0
         posZ: 0.05
         roll: deg(0)
         pitch: deg(0)
         yaw: deg(0)
-sonar3:
+sensor3:
     topic: ultrasound/range
     transform:
-        frame: sonar3
+        frame: sensor3
         posX: 0.08
         posY: 0.05
         posZ: 0.05
         roll: deg(0)
         pitch: deg(0)
         yaw: deg(45)
-sonar4:
+sensor4:
     topic: ultrasound/range
     transform:
-        frame: sonar4
+        frame: sensor4
         posX: 0.03
         posY: 0.07
         posZ: 0.05

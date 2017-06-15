@@ -1,26 +1,26 @@
 /**
-    Sonar Class
-    Sonar.h
+    Sensor Class
+    Sensor.h
     Purpose: Class that subscribes to `range_msg`
 
     @author Eliot Lim (github: @eliotlim)
     @version 1.0 (16/5/17)
 */
 
-#ifndef SONAR_H
-#define SONAR_H
+#ifndef SENSOR_H
+#define SENSOR_H
 
-#include "sonar_pointcloud.h"
+#include "sensor_pointcloud.h"
 
 #include <sensor_msgs/Range.h>
 #include <geometry_msgs/TransformStamped.h>
 
-namespace sonar_pointcloud {
+namespace sensor_pointcloud {
 
-class Sonar {
+class Sensor {
 public:
-    Sonar(std::string sonarTopic, std::string sonarFrame);
-    //~Sonar() {}
+    Sensor(std::string sensorTopic, std::string sensorFrame);
+    //~Sensor() {}
 
     void rangeCallback(const sensor_msgs::Range& range_msg);
     void setTransform(const geometry_msgs::TransformStamped transformS);

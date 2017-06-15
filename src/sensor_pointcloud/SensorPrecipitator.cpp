@@ -1,6 +1,6 @@
 /**
-    SonarPrecipitator Class
-    SonarPrecipitator.h
+    SensorPrecipitator Class
+    SensorPrecipitator.h
     Purpose: Class that converts `range msg` and `transforms` into PointCloud2
     Also publishes sensor frame transforms if defined.
 
@@ -45,19 +45,19 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
 
-#include <sonar_pointcloud/SonarPrecipitator.h>
+#include <sensor_pointcloud/SensorPrecipitator.h>
 
-using namespace sonar_pointcloud;
+using namespace sensor_pointcloud;
 
 /**
-    Constructor for SonarPrecipitator
+    Constructor for SensorPrecipitator
     Instantiates pointcloudFrame and tfListener using a tfBuffer
 
     @param pointcloudTopic Output topic for PointCloud2
     @param pointcloudFrame TF2 Frame for point cloud origin
 */
 
-SonarPrecipitator::SonarPrecipitator(std::string pointcloudTopic, std::string pointcloudFrame) :
+SensorPrecipitator::SensorPrecipitator(std::string pointcloudTopic, std::string pointcloudFrame) :
                                      frame(pointcloudFrame), tfListener(tfBuffer) {
     // ROS Setup
     nodeHandle = ros::NodeHandle();
@@ -66,32 +66,32 @@ SonarPrecipitator::SonarPrecipitator(std::string pointcloudTopic, std::string po
     // Start publisher thread
     // Refer to http://stackoverflow.com/questions/4581476/using-boost-thread-and-a-non-static-class-function
     publishRate = 20;
-    publishThread = boost::thread(boost::bind(&SonarPrecipitator::publishCallable, this));
+    publishThread = boost::thread(boost::bind(&SensorPrecipitator::publishCallable, this));
 }
 
 /**
-    Add a Sonar Input by Topic
-    Instantiates a Sonar Object
+    Add a Sensor Input by Topic
+    Instantiates a Sensor Object
 
-    @param sonarTopic Input topic for `range_msg`
-    @param pointcloudFrame TF2 Frame for Sonar Orientation
-    @return boost::shared_ptr<Sonar> smart pointer to sonar object
+    @param sensorTopic Input topic for `range_msg`
+    @param pointcloudFrame TF2 Frame for Sensor Orientation
+    @return boost::shared_ptr<Sensor> smart pointer to sensor object
 */
 
-boost::shared_ptr<Sonar> SonarPrecipitator::addSonar(std::string sonarTopic, std::string sonarFrame) {
-    boost::shared_ptr<Sonar> sonarPtr(new Sonar(sonarTopic, sonarFrame));
-    sonars.push_back(sonarPtr);
-    ROS_DEBUG("Inserted Sonar - Topic: %s, Frame: %s", sonarTopic.c_str(), sonarFrame.c_str());
-    return sonarPtr;
+boost::shared_ptr<Sensor> SensorPrecipitator::addSensor(std::string sensorTopic, std::string sensorFrame) {
+    boost::shared_ptr<Sensor> sensorPtr(new Sensor(sensorTopic, sensorFrame));
+    sensors.push_back(sensorPtr);
+    ROS_DEBUG("Inserted Sensor - Topic: %s, Frame: %s", sensorTopic.c_str(), sensorFrame.c_str());
+    return sensorPtr;
 }
 
 /**
     Publish thread callable
     Loops at specified publishRate, publishing PointCloud2 messages
-    Transform Sonar range reading to point cloud about pointcloudFrame
+    Transform Sensor range reading to point cloud about pointcloudFrame
 */
 
-void SonarPrecipitator::publishCallable() {
+void SensorPrecipitator::publishCallable() {
     ros::Rate loopRate(publishRate);
     while (ros::ok()) {
         pcl::PointCloud<pcl::PointXYZ>::Ptr pointCloud(new pcl::PointCloud<pcl::PointXYZ>());
@@ -99,36 +99,36 @@ void SonarPrecipitator::publishCallable() {
         pointCloud->height = 1;
         pointCloud->points.clear();
 
-        // Convert all Sonar readings to Points
-        std::vector<boost::shared_ptr<Sonar> >::iterator sonarIt;
-        for (sonarIt = sonars.begin(); sonarIt != sonars.end(); ++sonarIt) {
-            boost::shared_ptr<Sonar> sonar = *sonarIt;
+        // Convert all Sensor readings to Points
+        std::vector<boost::shared_ptr<Sensor> >::iterator sensorIt;
+        for (sensorIt = sensors.begin(); sensorIt != sensors.end(); ++sensorIt) {
+            boost::shared_ptr<Sensor> sensor = *sensorIt;
 
-            // Publish Sonar transform if applicable
-            if (sonar->transform) {
-                sonar->getTransform().header.stamp = ros::Time::now();
-                tfBroadcaster.sendTransform(sonar->getTransform());
+            // Publish Sensor transform if applicable
+            if (sensor->transform) {
+                sensor->getTransform().header.stamp = ros::Time::now();
+                tfBroadcaster.sendTransform(sensor->getTransform());
             }
 
-            // Check Sonar Range Validity
-            if (sonar->getRange() < 0) { continue; }
+            // Check Sensor Range Validity
+            if (sensor->getRange() < 0) { continue; }
 
-            // Get StampedTransform for Sonar
+            // Get StampedTransform for Sensor
             geometry_msgs::TransformStamped transform;
             try {
                 // Calling lookupTransform with ros::Time(0)
                 // results in the latest available transform
                 transform = tfBuffer.lookupTransform(pointCloud->header.frame_id,
-                                                     sonar->frame,
+                                                     sensor->frame,
                                                      ros::Time(0));
             } catch (tf2::TransformException ex) {
-                ROS_WARN("Sonar Transform Error: %s", ex.what());
+                ROS_WARN("Sensor Transform Error: %s", ex.what());
                 continue; // skip this reading
             }
 
             // Transform the range reading into a point
             geometry_msgs::PointStamped pt;
-            pt.point.x = sonar->getRange();
+            pt.point.x = sensor->getRange();
             geometry_msgs::PointStamped pointOut;
             tf2::doTransform(pt, pointOut, transform);
 
