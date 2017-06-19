@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
     std::string parent_namespace = ros::names::parentNamespace(pointcloudTopic);
     ROS_INFO("Pointcloud Topic : %s", pointcloudTopic.c_str());
 
-    // \Read Parameters for Topics, Sensor Transforms, etc.
+    // Read Parameters for Topics, Sensor Transforms, etc.
     std::string pointcloudFrame;
     nh.param<std::string>(ros::names::append(parent_namespace, "pointcloudFrame"), pointcloudFrame, "map");
     ROS_INFO("Pointcloud Frame : %s", pointcloudFrame.c_str());
@@ -50,6 +50,7 @@ int main(int argc, char** argv) {
     nh.getParam("sensors", sensors);
     if (sensors.size() == 0) ROS_WARN("No sensors configured");
 
+    // For each detected sensor, read the parameters and initialize Sensor objects
     for (std::vector<std::string>::iterator sensorNameIt = sensors.begin(); sensorNameIt != sensors.end(); ++sensorNameIt) {
         std::string sensorTopic, sensorFrame;
         nh.getParam(*sensorNameIt + "/topic", sensorTopic);
