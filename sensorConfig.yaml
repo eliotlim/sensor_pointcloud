@@ -11,13 +11,13 @@ sensors:
     - sensor2
     - sensor3
     - sensor4
-    - tera0
 
 sensor0:
-    topic: ultrasound/range
+    topic: sensor_hub/range
     device:
         type: SRF05
         pin: 14
+        timeout: 60000
     transform:
         frame: sensor0
         posX: 0.03
@@ -27,10 +27,11 @@ sensor0:
         pitch: deg(0)
         yaw: deg(-90)
 sensor1:
-    topic: ultrasound/range
+    topic: sensor_hub/range
     device:
         type: SRF10
         addr: 0xE2
+        timeout: 60000
     transform:
         frame: sensor1
         posX: 0.08
@@ -40,10 +41,11 @@ sensor1:
         pitch: deg(0)
         yaw: deg(-45)
 sensor2:
-    topic: ultrasound/range
+    topic: sensor_hub/range
     device:
         type: SRF10
         addr: 0xE4
+        timeout: 60000
     transform:
         frame: sensor2
         posX: 0.10
@@ -53,10 +55,11 @@ sensor2:
         pitch: deg(0)
         yaw: deg(0)
 sensor3:
-    topic: ultrasound/range
+    topic: sensor_hub/range
     device:
         type: SRF10
         addr: 0xE6
+        timeout: 60000
     transform:
         frame: sensor3
         posX: 0.08
@@ -66,10 +69,11 @@ sensor3:
         pitch: deg(0)
         yaw: deg(45)
 sensor4:
-    topic: ultrasound/range
+    topic: sensor_hub/range
     device:
         type: SRF05
         pin: 16
+        timeout: 60000
     transform:
         frame: sensor4
         posX: 0.03
