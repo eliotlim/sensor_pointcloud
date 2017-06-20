@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>sensor_pointcloud</name>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <description>Aggregate and convert range_msgs to PointCloud2</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
