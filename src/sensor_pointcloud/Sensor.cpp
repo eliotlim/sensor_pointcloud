@@ -42,7 +42,7 @@ void Sensor::setTransform(geometry_msgs::TransformStamped transformS) {
     this->transformS->child_frame_id = frame;
 }
 
-geometry_msgs::TransformStamped Sensor::getTransform() { return *transformS; }
+boost::shared_ptr<geometry_msgs::TransformStamped> Sensor::getTransform() { return transformS; }
 
 /**
     Range Message Callback

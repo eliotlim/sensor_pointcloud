@@ -106,8 +106,8 @@ void SensorPrecipitator::publishCallable() {
 
             // Publish Sensor transform if applicable
             if (sensor->transform) {
-                sensor->getTransform().header.stamp = ros::Time::now();
-                tfBroadcaster.sendTransform(sensor->getTransform());
+                sensor->getTransform()->header.stamp = ros::Time::now();
+                tfBroadcaster.sendTransform(*(sensor->getTransform()));
             }
 
             // Check Sensor Range Validity

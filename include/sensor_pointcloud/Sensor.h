@@ -24,7 +24,7 @@ public:
 
     void rangeCallback(const sensor_msgs::Range& range_msg);
     void setTransform(const geometry_msgs::TransformStamped transformS);
-    geometry_msgs::TransformStamped getTransform();
+    boost::shared_ptr<geometry_msgs::TransformStamped> getTransform();
     float getRange();
 
     std::string topic;
