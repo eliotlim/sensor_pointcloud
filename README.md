@@ -14,7 +14,7 @@ git clone https://github.com/eliotlim/sensor_pointcloud
 ## Usage
 #### roslaunch
 1. Execute `roslaunch sensor_pointcloud sensor_pointcloud.launch`
-  - This will load `sensor_pointcloud/sensorConfig.yaml` by default.
+  - This will load `sensor_pointcloud/sensorConfig.yaml` into the node namespace by default.
 
 #### rosrun
 1. Load ros parameters using `rosparam`

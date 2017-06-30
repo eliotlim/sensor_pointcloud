@@ -18,7 +18,7 @@
 
 namespace sensor_pointcloud {
     const std::string ROS_PREFIX = "sensor_pointcloud";
-    const std::string VERSION_STRING = "0.1.3";
+    const std::string VERSION_STRING = "0.1.4";
 }
 
 #endif

@@ -23,12 +23,12 @@ using namespace sensor_pointcloud;
 int main(int argc, char** argv) {
     // ros::init must be the first call in main()
     ros::init(argc, argv, ROS_PREFIX);
-    ros::NodeHandle nh;
+    ros::NodeHandle nh, nhp("~");
 
     ROS_INFO("%s: v%s", ROS_PREFIX.c_str(), VERSION_STRING.c_str());
 
     // Remap and resolve Topic Names
-    std::string pointcloudTopic = ros::names::append(ROS_PREFIX, "pointcloud");
+    std::string pointcloudTopic = ros::names::append(ros::this_node::getName(), "pointcloud");
     if (ros::names::remap(pointcloudTopic) != pointcloudTopic) {
         pointcloudTopic = ros::names::remap(pointcloudTopic);
     }
@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 
     // Read Parameters for Topics, Sensor Transforms, etc.
     std::string pointcloudFrame;
-    nh.param<std::string>(ros::names::append(parent_namespace, "pointcloudFrame"), pointcloudFrame, "map");
+    nhp.param<std::string>(ros::names::append(parent_namespace, "pointcloudFrame"), pointcloudFrame, "map");
     ROS_INFO("Pointcloud Frame : %s", pointcloudFrame.c_str());
 
     // Create SensorPrecipitator Object
@@ -47,14 +47,14 @@ int main(int argc, char** argv) {
 
     // Add Sensor Topics to SensorPrecipitator
     std::vector<std::string> sensors;
-    nh.getParam("sensors", sensors);
+    nhp.getParam("sensors", sensors);
     if (sensors.size() == 0) ROS_WARN("No sensors configured");
 
     // For each detected sensor, read the parameters and initialize Sensor objects
     for (std::vector<std::string>::iterator sensorNameIt = sensors.begin(); sensorNameIt != sensors.end(); ++sensorNameIt) {
         std::string sensorTopic, sensorFrame;
-        nh.getParam(*sensorNameIt + "/topic", sensorTopic);
-        nh.getParam(*sensorNameIt + "/transform/frame", sensorFrame);
+        nhp.getParam(*sensorNameIt + "/topic", sensorTopic);
+        nhp.getParam(*sensorNameIt + "/transform/frame", sensorFrame);
         ROS_INFO("Sensor Parameters Loaded - Topic: %s Frame: %s", sensorTopic.c_str(), sensorFrame.c_str());
 
         boost::shared_ptr<Sensor> s = precipitator.addSensor(sensorTopic, sensorFrame);
@@ -74,9 +74,9 @@ int main(int argc, char** argv) {
             // Load roll/pitch/yaw parameters - WILL NOT LOAD IF x/y/z not set
             tf2::Quaternion q;
             float roll = 0, pitch = 0, yaw = 0;
-            nh.getParam(*sensorNameIt + "/transform/roll", roll);
-            nh.getParam(*sensorNameIt + "/transform/pitch", pitch);
-            nh.getParam(*sensorNameIt + "/transform/yaw", yaw);
+            nhp.getParam(*sensorNameIt + "/transform/roll", roll);
+            nhp.getParam(*sensorNameIt + "/transform/pitch", pitch);
+            nhp.getParam(*sensorNameIt + "/transform/yaw", yaw);
             q.setRPY(roll, pitch, yaw);
 
             // Set sensor transform from parameters
