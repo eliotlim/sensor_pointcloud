@@ -8,8 +8,7 @@
 %YAML 1.2
 ---
 # Configuration
-sensor_pointcloud:
-    pointcloudFrame: map
+pointcloudFrame: map
 ```
 This portion declares:
 1. The configuration file format (YAML 1.2)

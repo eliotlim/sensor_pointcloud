@@ -1,8 +1,7 @@
 %YAML 1.2
 ---
 # Configuration
-sensor_pointcloud:
-    pointcloudFrame: map
+pointcloudFrame: map
 
 # List of sensors
 sensors:
