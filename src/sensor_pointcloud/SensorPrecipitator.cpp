@@ -143,7 +143,7 @@ void SensorPrecipitator::publishCallable() {
         }
 
         // Publish PointCloud2
-        pointcloudPublisher.publish(pointCloud);
+        pointcloudPublisher.publish(*pointCloud);
         ROS_DEBUG("PointCloud published with %d elements", pointCloud->width);
         loopRate.sleep();
     }
